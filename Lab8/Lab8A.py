@@ -3,14 +3,20 @@ from pygame.locals import *
 
 pygame.init()
 
+# Colors
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+
+# create rectangles 1 and 2
 rect1 = pygame.Rect(175, 0, 50, 400)
-surf1 = pygame.Surface((rect1.width, rect1.height))
-surf1.fill((255, 0, 0))  # red
+obstacle = pygame.Surface((rect1.width, rect1.height))
 
 rect2 = pygame.Rect(175, 175, 50, 50)
-surf2 = pygame.Surface((rect2.width, rect2.height))
-surf2.fill((0, 0, 255))  # blue
+square = pygame.Surface((rect2.width, rect2.height))
+square.fill(BLUE)  # blue
 
+# direction of surf2
 direction = 1
 
 resolution = (400, 400)
@@ -23,18 +29,20 @@ while True:
     for event in pygame.event.get():
         if event.type == QUIT:
             sys.exit(0)
-        if keys[pygame.K_ESCAPE]:
-            sys.exit(0)
 
     screen.fill(color=(0, 0, 0))
-    screen.blit(surf1, (rect1.x, rect1.y))
-    screen.blit(surf2, (rect2.x, rect2.y))
+    screen.blit(obstacle, (rect1.x, rect1.y))
+    screen.blit(square, (rect2.x, rect2.y))
 
+    # changes the direction when surf2 hits the border
     rect2 = rect2.move(5 * direction, 0)
     if rect2.x >= 350 or rect2.x <= -1:
         direction *= -1
 
-    
+    if rect2.colliderect(rect1):
+        obstacle.fill(GREEN)
+    else:
+        obstacle.fill(RED)
 
     pygame.display.flip()
 
